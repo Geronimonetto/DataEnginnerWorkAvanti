@@ -1,0 +1,39 @@
+# ─── Python ───
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.python-version
+
+# ─── Environment ───
+.env
+config/.env
+
+# ─── dbt ───
+dbt_bcb/logs/
+dbt_bcb/target/
+dbt_bcb/.user.yml
+
+# ─── Airflow (local) ───
+airflow_project/logs/
+airflow_project/plugins/
+airflow_project/config/
+
+# ─── Data gerado pelo pipeline (não commitar dados brutos) ───
+data/bronze/
+data/silver/
+data/gold/
+
+# ─── Lock files pesados ───
+uv.lock
+
+# ─── IDE ───
+.vscode/
+.idea/
+
+# ─── OS ───
+.DS_Store
+Thumbs.db
+
+# ─── Notebooks vazios ───
+notebooks/
