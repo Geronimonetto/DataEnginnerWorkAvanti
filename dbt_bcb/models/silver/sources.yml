@@ -1,0 +1,8 @@
+version: 2
+sources:
+  - name: bronze
+    schema: bronze
+    tables:
+      - name: bcb_selic
+      - name: bcb_usd
+      - name: bcb_eur

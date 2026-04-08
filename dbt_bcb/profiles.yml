@@ -1,0 +1,12 @@
+bcb_profile:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: "{{ env_var('POSTGRES_HOST', 'localhost') }}"
+      user: airflow
+      password: airflow
+      port: 5432
+      dbname: airflow
+      schema: public
+      threads: 4
