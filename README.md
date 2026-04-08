@@ -12,13 +12,11 @@ A ideia é simples: buscar os dados todo dia, tratar os dados faltantes de finai
 # 1. Sobe a infra (PostgreSQL + Airflow)
 docker compose up -d
 
-# 2. Espera uns 2 min pro Airflow inicializar
+# 2. Espera uns 2 min pro Airflow inicializar (instalação de pacotes)
 
-# 3. Acessa http://localhost:8080
-#    Login: admin
-#    Senha: admin123
+# 3. Acessa http://localhost:8080 (admin / admin123)
 
-# 4. Dá um Trigger na DAG "pipeline_medalhao_bcb"
+# 4. Ative o toggle (Unpause) e clique em "Trigger DAG" na dag pipeline_medalhao_bcb
 
 # 5. Os CSVs de saída caem em data/
 ```
@@ -27,6 +25,20 @@ Pra derrubar tudo:
 ```bash
 docker compose down -v
 ```
+
+---
+
+## 🗄️ Acesso ao Banco de Dados (DWH)
+
+Se quiser conectar uma ferramenta (DBeaver, TablePlus, pgAdmin) para validar as tabelas:
+
+- **Host:** `localhost`
+- **Porta:** `5432`
+- **Database:** `airflow`  <-- *(Não use o padrão 'postgres')*
+- **Usuário:** `airflow`
+- **Senha:** `airflow`
+
+Os dados estão organizados nos schemas `bronze`, `silver` e `public_gold`.
 
 ---
 

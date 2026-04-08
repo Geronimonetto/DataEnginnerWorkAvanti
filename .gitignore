@@ -24,13 +24,6 @@ data/bronze/
 data/silver/
 data/gold/
 
-# ─── Lock files pesados ───
-uv.lock
-
-# ─── IDE ───
-.vscode/
-.idea/
-
 # ─── OS ───
 .DS_Store
 Thumbs.db
