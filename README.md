@@ -46,21 +46,10 @@ Os dados estão organizados nos schemas `bronze`, `silver` e `public_gold`.
 
 Organizei a solução usando **Medallion Architecture**, que basicamente separa o dado em 3 camadas com responsabilidades diferentes:
 
-```
-APIs BCB (SGS + PTAX)
-       │
-       ▼
-┌─────────────┐     ┌──────────────────┐     ┌─────────────────┐
-│ 🥉 BRONZE   │────▶│ 🥈 SILVER        │────▶│ 🥇 GOLD         │
-│  JSON bruto │     │  Limpo + Fill    │     │  Tabela Fato     │
-│  aiohttp    │     │  dbt Core        │     │  fct_indicador   │
-│  + backoff  │     │  + Forward Fill  │     │  + dim_indicador │
-│             │     │  + SCD2 Snapshot │     │                  │
-└─────────────┘     └──────────────────┘     └─────────────────┘
-       │                    │                        │
-       └────────────────────┴────────────────────────┘
-                     PostgreSQL 13
-```
+
+
+![](https://i.imgur.com/LuTjapB.png)
+
 
 **Orquestrador:** Apache Airflow 2.8  
 **Infra:** Docker Compose (dois containers — PostgreSQL + Airflow)
