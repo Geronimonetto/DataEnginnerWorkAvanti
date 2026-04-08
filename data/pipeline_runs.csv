@@ -1,0 +1,7 @@
+id_run,label,etapa,status,rows_returned,duration_s,executed_at,error_msg
+2c356ac4-951a-4262-b581-ea92d0079f09,Ingestion SELIC,bronze,success,570,0.45s,2026-04-08 00:55:42.567137,
+6ca3881d-49d2-4fbd-8626-db2a1aa076bf,Ingestion USD,bronze,success,571,0.47s,2026-04-08 00:55:46.226049,
+72908a30-bf96-4e92-af6f-2f3df5c104bc,Ingestion EUR,bronze,success,571,0.45s,2026-04-08 00:55:49.982870,
+1633a87f-4a9f-4891-8200-010dd6954dc6,Ingestion SELIC,bronze,error,0,4.81s,2026-04-08 00:56:50.849885,API retornou None
+0b84b7e8-c6ef-445d-a56d-c166cf219357,Ingestion USD,bronze,success,0,0.35s,2026-04-08 00:56:54.467088,
+de91e532-2129-42b8-94f1-c5eb2be6977f,Ingestion EUR,bronze,success,0,0.41s,2026-04-08 00:56:58.075226,

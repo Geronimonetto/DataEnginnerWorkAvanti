@@ -1,0 +1,4 @@
+sk_indicador,codigo,nome,periodicidade,fonte
+1,11,SELIC,diária,SGS/BCB
+2,USD,Dólar comercial,diária,PTAX/BCB
+3,EUR,Euro comercial,diária,PTAX/BCB
