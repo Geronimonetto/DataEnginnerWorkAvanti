@@ -70,11 +70,11 @@ def bcb_pipeline():
     @task(task_id="extrair_eur_bronze")
     def bronze_eur(**context):
         if _is_first_load("bcb_eur"):
-            print("📦 Primeira carga EUR — buscando histórico completo desde 01/01/2024")
+            print("Primeira carga EUR — buscando histórico completo desde 01/01/2024")
             dt_start = HISTORIAL_START_PTAX
         else:
             dt_start = (datetime.utcnow() - timedelta(days=7)).strftime("%m-%d-%Y")
-            print(f"📅 Carga incremental EUR — buscando desde {dt_start}")
+            print(f"Carga incremental EUR — buscando desde {dt_start}")
         dt_end = _yesterday_str("%m-%d-%Y")
         c_eur = create_ptax_contract("EUR", dt_start, dt_end)
         sync_runner(c_eur)

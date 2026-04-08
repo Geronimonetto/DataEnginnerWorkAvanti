@@ -22,7 +22,7 @@ def create_ptax_contract(moeda: str, start_date_mm_dd_yyyy: str, end_date_mm_dd_
     safe_date = f"{start_date_mm_dd_yyyy}_to_{end_date_mm_dd_yyyy}"
     
     return ExtractionContract(
-        indicator_name=moeda.casefold(), # ex: "usd"
+        indicator_name=moeda.casefold(),
         url=f"{base_url}{query}", 
         safe_date=safe_date
     )
@@ -88,13 +88,12 @@ async def run_extraction(contract: ExtractionContract):
             error_msg=str(e)
         )
         print(f"❌ Erro fatal na execução: {e}")
-        raise # Re-raise para o Airflow capturar a falha
+        raise
 
 async def main():
     from datetime import datetime, timedelta
     print("=== ORQUESTRADOR: TESTE MANUAL INICIADO ===")
     
-    # Simula a lógica de carga total para teste
     start_date_ptax = "01-01-2024"
     start_date_selic = "01/01/2024"
     yesterday = (datetime.utcnow() - timedelta(days=1)).strftime("%m-%d-%Y")

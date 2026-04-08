@@ -10,7 +10,7 @@ services:
     volumes:
       - postgres_dw_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U airflow"]
+      test: [ "CMD-SHELL", "pg_isready -U airflow" ]
       interval: 5s
       retries: 5
 
@@ -18,13 +18,13 @@ services:
     image: apache/airflow:2.8.0
     command: >
       bash -c "
-        echo '📦 Instalando dependências do projeto...' &&
+        echo 'Instalando dependências do projeto...' &&
         pip install --quiet aiohttp pandas psycopg2-binary SQLAlchemy dbt-postgres dbt-core &&
-        echo '✅ Dependências instaladas!' &&
+        echo 'Dependências instaladas!' &&
         airflow db migrate &&
         airflow users create --username admin --firstname Admin --lastname User --role Admin --email admin@email.com --password admin123 || true;
-        echo '🚀 Airflow pronto — acesse http://localhost:8080 (admin / admin123)' &&
-        echo '👉 Ative a DAG pipeline_medalhao_bcb e clique em Trigger para rodar o pipeline' &&
+        echo 'Airflow pronto — acesse http://localhost:8080 (admin / admin123)' &&
+        echo 'Ative a DAG pipeline_medalhao_bcb e clique em Trigger para rodar o pipeline' &&
         exec airflow standalone
       "
     environment:

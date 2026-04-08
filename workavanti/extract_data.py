@@ -53,8 +53,6 @@ class ExtractData:
         if not data:
             return
 
-        # Usa PROJECT_ROOT definido no docker-compose (PYTHONPATH=/opt/workavanti).
-        # Fallback: sobe dois níveis a partir deste arquivo (workavanti/extract_data.py → raiz).
         project_root = Path(os.getenv("PROJECT_ROOT", Path(__file__).parent.parent))
 
         target_path = project_root / "data" / "bronze" / "bcb" / self.contract.indicator_name
@@ -75,7 +73,6 @@ class ExtractData:
             return
             
         db_host = os.getenv("POSTGRES_HOST", "localhost")
-        # Forçamos a conexão ao banco 'airflow' conforme definido no docker-compose
         conn_str = f"postgresql+psycopg2://airflow:airflow@{db_host}:5432/airflow"
         engine = create_engine(conn_str)
 
@@ -90,7 +87,6 @@ class ExtractData:
 
         df['_inserted_at'] = pd.Timestamp.now()
 
-        # Garante schema e checa conectividade
         try:
             with engine.begin() as conn:
                 conn.execute(text("CREATE SCHEMA IF NOT EXISTS bronze;"))
@@ -99,7 +95,6 @@ class ExtractData:
             print(f"❌ Erro de Network/Conexão com Postgres: {e}")
             raise
 
-        # Descarrega no banco (append = inserir novos no final sem apagar a tabela)
         table_name = f"bcb_{self.contract.indicator_name}"
         df.to_sql(table_name, engine, schema="bronze", if_exists="append", index=False)
         
