@@ -6,7 +6,6 @@ import os
 
 from workavanti.runtimer import run_extraction, create_selic_contract, create_ptax_contract
 
-# Data de início do histórico na primeira carga
 HISTORIAL_START = "01/01/2024"
 HISTORIAL_START_PTAX = "01-01-2024"
 
@@ -50,7 +49,6 @@ def bcb_pipeline():
             print("📦 Primeira carga SELIC — buscando histórico completo desde 01/01/2024")
             dt_start = HISTORIAL_START
         else:
-            # Carga incremental: busca últimos 7 dias pra cobrir feriados/fins de semana
             dt = datetime.utcnow() - timedelta(days=7)
             dt_start = dt.strftime("%d/%m/%Y")
             print(f"📅 Carga incremental SELIC — buscando a partir de {dt_start}")
