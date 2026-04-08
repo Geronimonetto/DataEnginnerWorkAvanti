@@ -1,4 +1,0 @@
-id_run,label,etapa,status,rows_returned,duration_s,executed_at,error_msg
-c8470df8-a286-4848-a7c4-a72299cf44d8,Ingestion SELIC,bronze,success,570,2.64s,2026-04-08 01:47:09.265464,
-f31be56c-1851-4280-9166-f759feeecbbd,Ingestion USD,bronze,success,571,0.48s,2026-04-08 01:47:13.199616,
-e5054c3d-31a0-4956-b991-b7f55f9bd853,Ingestion EUR,bronze,success,571,0.53s,2026-04-08 01:47:16.986058,
