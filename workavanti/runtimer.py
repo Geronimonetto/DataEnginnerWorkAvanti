@@ -46,7 +46,7 @@ async def run_extraction(contract: ExtractionContract):
                 
         duration = time.time() - start_time
         
-        if resultado is not None:
+        if resultado is not None and rows_returned > 0:
 
             motor.save_to_bronze(resultado)
             motor.save_to_postgres(resultado)
@@ -58,14 +58,24 @@ async def run_extraction(contract: ExtractionContract):
                 rows_returned=rows_returned,
                 duration_s=duration
             )
-        else:
+        elif resultado is None:
             log_pipeline_run(
                 label=f"Ingestion {contract.indicator_name.upper()}",
                 etapa="bronze",
                 status="error",
                 rows_returned=0,
                 duration_s=duration,
-                error_msg="API retornou None"
+                error_msg="API retornou None — possível 404 ou timeout"
+            )
+            raise RuntimeError(f"❌ Extração {contract.indicator_name.upper()} falhou: API retornou None")
+        else:
+            print(f"⚠️ [{contract.indicator_name.upper()}] API retornou lista vazia — nenhum dado novo")
+            log_pipeline_run(
+                label=f"Ingestion {contract.indicator_name.upper()}",
+                etapa="bronze",
+                status="success",
+                rows_returned=0,
+                duration_s=duration
             )
     except Exception as e:
         duration = time.time() - start_time
@@ -77,13 +87,22 @@ async def run_extraction(contract: ExtractionContract):
             duration_s=duration,
             error_msg=str(e)
         )
+        print(f"❌ Erro fatal na execução: {e}")
+        raise # Re-raise para o Airflow capturar a falha
 
 async def main():
-    print("=== ORQUESTRADOR INICIADO ===")
+    from datetime import datetime, timedelta
+    print("=== ORQUESTRADOR: TESTE MANUAL INICIADO ===")
     
-    c_selic = create_selic_contract("01/01/2024")
-    c_usd   = create_ptax_contract("USD", "01-01-2024", "01-15-2024")
-    c_eur   = create_ptax_contract("EUR", "01-01-2024", "01-15-2024")
+    # Simula a lógica de carga total para teste
+    start_date_ptax = "01-01-2024"
+    start_date_selic = "01/01/2024"
+    yesterday = (datetime.utcnow() - timedelta(days=1)).strftime("%m-%d-%Y")
+    yesterday_selic = (datetime.utcnow() - timedelta(days=1)).strftime("%d/%m/%Y")
+
+    c_selic = create_selic_contract(start_date_selic)
+    c_usd   = create_ptax_contract("USD", start_date_ptax, yesterday)
+    c_eur   = create_ptax_contract("EUR", start_date_ptax, yesterday)
 
     await asyncio.gather(
         run_extraction(c_selic),
@@ -91,7 +110,7 @@ async def main():
         run_extraction(c_eur)
     )
     
-    print("=== TODAS AS EXTRAÇÕES FORAM BEM SUCEDIDAS ===")
+    print("=== TESTE MANUAL CONCLUÍDO COM SUCESSO ===")
 
 if __name__ == "__main__":
     asyncio.run(main())

@@ -70,28 +70,33 @@ class ExtractData:
         if not data:
             return
             
-        # Pega a variável de ambiente se estiver no Docker, ou 'localhost' se rodou no Windows direto    
         db_host = os.getenv("POSTGRES_HOST", "localhost")
-        engine = create_engine(f"postgresql+psycopg2://airflow:airflow@{db_host}:5432/airflow")
+        # Forçamos a conexão ao banco 'airflow' conforme definido no docker-compose
+        conn_str = f"postgresql+psycopg2://airflow:airflow@{db_host}:5432/airflow"
+        engine = create_engine(conn_str)
 
-        # A PTAX retorna o valor sob a chave 'value'. A SELIC entrega a lista direta.
         if self.contract.indicator_name == "selic":
             df = pd.DataFrame(data)
         else:
             df = pd.DataFrame(data.get("value", []))
             
         if df.empty:
+            print(f"⚠️ [{self.contract.indicator_name.upper()}] DataFrame vazio, nada para inserir.")
             return
 
-        # Controle de granularidade de extração para idempotência analítica
         df['_inserted_at'] = pd.Timestamp.now()
 
-        # Cria o esquema 'bronze' se ele for novinho
-        with engine.begin() as conn:
-            conn.execute(text("CREATE SCHEMA IF NOT EXISTS bronze;"))
+        # Garante schema e checa conectividade
+        try:
+            with engine.begin() as conn:
+                conn.execute(text("CREATE SCHEMA IF NOT EXISTS bronze;"))
+                print(f"✅ Conexão com Postgres ({db_host}) OK. Schema 'bronze' verificado.")
+        except Exception as e:
+            print(f"❌ Erro de Network/Conexão com Postgres: {e}")
+            raise
 
         # Descarrega no banco (append = inserir novos no final sem apagar a tabela)
         table_name = f"bcb_{self.contract.indicator_name}"
         df.to_sql(table_name, engine, schema="bronze", if_exists="append", index=False)
         
-        print(f"🐘 Dado nativo inserido no PostgreSQL (DWH): bronze.{table_name}")
+        print(f"🐘 [POSTGRES] {len(df)} linhas inseridas em bronze.{table_name} no host {db_host}")
