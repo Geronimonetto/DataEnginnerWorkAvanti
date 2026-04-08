@@ -53,7 +53,11 @@ class ExtractData:
         if not data:
             return
 
-        target_path = Path(f"data/bronze/bcb/{self.contract.indicator_name}")
+        # Usa PROJECT_ROOT definido no docker-compose (PYTHONPATH=/opt/workavanti).
+        # Fallback: sobe dois níveis a partir deste arquivo (workavanti/extract_data.py → raiz).
+        project_root = Path(os.getenv("PROJECT_ROOT", Path(__file__).parent.parent))
+
+        target_path = project_root / "data" / "bronze" / "bcb" / self.contract.indicator_name
         target_path.mkdir(parents=True, exist_ok=True)
         
         file_path = target_path / f"{self.contract.safe_date}.json"
