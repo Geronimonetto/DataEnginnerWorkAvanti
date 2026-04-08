@@ -33,6 +33,7 @@ services:
       - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
       - PYTHONPATH=/opt/workavanti
       - POSTGRES_HOST=postgres
+      - PROJECT_ROOT=/opt/workavanti
     volumes:
       - ./airflow_project/dags:/opt/airflow/dags
       - ./:/opt/workavanti
